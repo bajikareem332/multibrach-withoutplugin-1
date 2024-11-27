@@ -3,28 +3,29 @@ pipeline
     agent any
     stages
     {
-        stage('contdownload')
+        stage('ContinuousDownload')
         {
             steps
             {
-               git 'https://github.com/sudarshansw7/mymaven.git'
+                git 'https://github.com/sudarshansw7/mymaven.git'
             }
         }
-        stage('contbuild')
+        stage('ContinuousBuild')
         {
             steps
             {
-             sh 'mvn package'
+                sh 'mvn package'
             }
         }
-        stage('contdeployment')
+        stage('ContinuousDeployment')
         {
             steps
             {
-                deploy adapters: [tomcat9(credentialsId: '1babbd2e-9c0a-42f0-b6fd-bf449bd5e109', path: '', url: 'http://172.31.17.145:8080')], contextPath: 'webapp', war: '**/*.war'
+               sh "scp /var/lib/jenkins/workspace/withoutplugin/webapp/target/webapp.war ubuntu@172.31.17.145:/var/lib/tomcat10/webapps/testapp.war"
             }
         }
-        
+   
     }
     
 }
+    
